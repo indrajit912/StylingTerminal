@@ -5,6 +5,8 @@
 # Date: Dec 13, 2021
 #
 
+import re
+
 class IndraStyle:
 
     """
@@ -22,6 +24,10 @@ class IndraStyle:
         2.
             To change the 'background' color use the following:
             >>> print(f"{IndraStyle.BG_RED + Hello World!{IndraStyle.END}")
+
+        3. To save an output which has ANSI escape use 
+            >>> IndraStyle.write_string_with_ANSI_to_file(string, 'string_without_ansi.txt')
+            
 
         CAUTION:
             If you are using 'windows' make sure to include the following lines
@@ -415,6 +421,32 @@ class IndraStyle:
     GAINSBORO_BG = '\x1b[48;2;220;220;220m'
     WHITE_SMOKE_BG = '\x1b[48;2;245;245;245m'
     WHITE_BG = '\x1b[48;2;255;255;255m'
+
+    # 7-bit C1 ANSI sequences
+    ANSI_ESCAPE = re.compile(r"""
+        \x1B  # ESC
+        (?:   # 7-bit C1 Fe (except CSI)
+            [@-Z\\-_]
+        |     # or [ for CSI, followed by a control sequence
+            \[
+            [0-?]*  # Parameter bytes
+            [ -/]*  # Intermediate bytes
+            [@-~]   # Final byte
+        )
+    """, re.VERBOSE
+    )
+
+
+    @staticmethod
+    def write_string_with_ANSI_to_file(strings, filename):
+        """Accepts a string with ansi char and saves it into the file `filename` in a plain text format"""
+    
+        with open(filename, 'w') as f:
+            f.write(IndraStyle.ANSI_ESCAPE.sub('', strings))
+
+        print(f"\n{IndraStyle.ITALLIC + IndraStyle.PALE_GOLDEN_ROD}Saved successfully into the file `{IndraStyle.PERU}{filename}{IndraStyle.ITALLIC + IndraStyle.PALE_GOLDEN_ROD}`!{IndraStyle.END}\n")
+
+
 
 
 def show_quotes():
