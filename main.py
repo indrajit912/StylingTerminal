@@ -151,14 +151,20 @@ def generate_color_output(rgb_or_listOfRgb_or_colorName):
     Accepts: tuple or list or str
     Prints: color output(s) on the terminal
     """
-    if type(rgb_or_listOfRgb_or_colorName) == tuple:
+    if isinstance(rgb_or_listOfRgb_or_colorName, tuple):
         generate_color_output_from_rgb(rgb_or_listOfRgb_or_colorName)
-    elif type(rgb_or_listOfRgb_or_colorName) == str:
-        if rgb_or_listOfRgb_or_colorName in COLORS.keys():
-            rgb = COLORS[rgb_or_listOfRgb_or_colorName]['rgb']
-            generate_color_output_from_rgb(rgb)
+    elif isinstance(rgb_or_listOfRgb_or_colorName, str):
+        if rgb_or_listOfRgb_or_colorName.startswith('#'):
+            # TODO: Wrte a function that accepts a hex-code and returns the rgb tuple
+            print(f"{rgb_or_listOfRgb_or_colorName} is a hex-code")
+            pass
         else:
-            print(f" Sorry, '{rgb_or_listOfRgb_or_colorName}' is not in our database!\n")
+            if rgb_or_listOfRgb_or_colorName in COLORS.keys():
+                rgb = COLORS[rgb_or_listOfRgb_or_colorName]['rgb']
+                generate_color_output_from_rgb(rgb)
+
+            else:
+                print(f" Sorry, '{rgb_or_listOfRgb_or_colorName}' is not in our database!\n")
     else:
         try:
             for rgb in rgb_or_listOfRgb_or_colorName:
