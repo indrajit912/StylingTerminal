@@ -155,9 +155,15 @@ def generate_color_output(rgb_or_listOfRgb_or_colorName):
         generate_color_output_from_rgb(rgb_or_listOfRgb_or_colorName)
     elif isinstance(rgb_or_listOfRgb_or_colorName, str):
         if rgb_or_listOfRgb_or_colorName.startswith('#'):
-            # TODO: Wrte a function that accepts a hex-code and returns the rgb tuple
-            print(f"{rgb_or_listOfRgb_or_colorName} is a hex-code")
-            pass
+            not_found = True
+            for k, v in COLORS.items():
+                if v['hex_code'] == rgb_or_listOfRgb_or_colorName:
+                    generate_color_output_from_rgb(v['rgb'])
+                    not_found = False
+                    break
+            if not_found:
+                print(f"The hex code is not in the database!\n")
+            
         else:
             if rgb_or_listOfRgb_or_colorName in COLORS.keys():
                 rgb = COLORS[rgb_or_listOfRgb_or_colorName]['rgb']
@@ -227,7 +233,7 @@ def main():
     ]
 
 
-    generate_color_output((218, 47, 121)) # Change the argument of this function
+    generate_color_output('#BDA589') # Change the argument of this function
     # colored_number_output()
     # isi_address()
 
